@@ -25,6 +25,8 @@ end
 def wrap(paragraph, width)
   words = paragraph.split
 
+  return [] if words.none?
+
   longest_word = words.max_by(&:length)
 
   if longest_word.length > width
@@ -60,16 +62,38 @@ end
 width = ARGV.shift.to_i
 input = ARGF.read
 
-paragraphs = input.split(/\n\n/)
+paragraphs = input.split(/\n\n*?/)
+
+def split(string)
+  paragraphs = []
+  paragraph = ""
+
+  chars = string.chars << nil << nil
+
+  chars.each_cons(3) do |c, p1, p2|
+    if p1 == nil && p2 == nil
+      paragraph << c
+      paragraphs << paragraph
+    elsif c == "\n" && p1 == "\n" && p2 != "\n"
+      paragraphs << paragraph
+      paragraph = ""
+    else
+      paragraph << c
+    end
+  end
+
+  paragraphs
+end
 
 wrapped_paragraphs = paragraphs.map do |paragraph|
   wrap(paragraph, width)
 end
 
+
 justified_paragraphs = wrapped_paragraphs.map do |lines|
   if lines.length > 0
     last_line = lines.pop
-    justified_lines = lines.compact.map { |line| justify(line, width) }
+    justified_lines = lines.map { |line| justify(line, width) }
 
     [
       justified_lines,

@@ -8,6 +8,12 @@ output from a given run of your program should have the same
 length, and the last line is to be no longer than the other
 lines.
 
+5 blank lines follow
+
+
+
+
+
 The Text Justification algorithm will ensure that the output from
 your program is both left and right justified when displayed in a
 mono-spaced font  such as Courier.  This  paragraph is an example
@@ -16,5 +22,21 @@ output from  a given run  of your  program should  have the  same
 length, and  the last  line is  to be  no longer  than the  other
 lines.
 
+1 blank line follows
+
+two blank lines follow
+
+
+three blank lines follow
+
+
+
+four blank lines follow
+
+
+
 
 Construct a linked list that represents the current line of output. For each word in the output, add a node to the end of the list representing that word, then add another node to the end to signify the amount of space between that word and the next (initially, this is one space). You should also keep track of these space nodes in some type of array structure, to facilitate fast random access. When adding a new word would cause the combined length of all the words and spaces in the list to exceed the line length, stop. Remove the last node of the list (remember, this is the space from the last word on the line). Then distribute additional spaces among the space nodes (you can choose a reference randomly from the array you kept around and add a space to that node) until the combined length of the words and spaces in the list is equal to the prescribed line length. (Actually, you don't want all the space to be distributed randomly; see phase 3 below.) Traverse the list and output each word and set of spaces in order. Output a newline and start over. When you run out of words, output the remaining list without adding extra space, then terminate.
+
+
+
