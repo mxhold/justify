@@ -86,16 +86,7 @@ def justify(line, width)
   line
 end
 
-width = ARGV.shift.to_i
-input = ARGF.read
-
-paragraphs = split(input)
-
-wrapped_paragraphs = paragraphs.map do |paragraph|
-  wrap(paragraph, width)
-end
-
-justified_paragraphs = wrapped_paragraphs.map do |lines|
+def justify_paragraph(lines, width)
   if lines.length > 0
     last_line = lines.pop
     justified_lines = lines.map { |line| justify(line, width) }
@@ -109,4 +100,17 @@ justified_paragraphs = wrapped_paragraphs.map do |lines|
   end
 end
 
-print justified_paragraphs.join
+width = ARGV.shift.to_i
+input = ARGF.read
+
+paragraphs = split(input)
+
+wrapped_paragraphs = paragraphs.map do |paragraph|
+  wrap(paragraph, width)
+end
+
+justified_paragraphs = wrapped_paragraphs.map do |lines|
+  justify_paragraph(lines, width)
+end
+
+puts justified_paragraphs.join
