@@ -1,29 +1,35 @@
 #!/usr/bin/env ruby
 
-def justify(line, width)
-  line = line.dup
+def split(string)
+  paragraphs = []
+  paragraph = ""
 
-  while line.length < width
-    words = line.split(/ /)
-    indexes = (0..(words.length - 2)).to_a
-    return line if indexes.none?
-    spaces_to_add = width - line.length
-    indexes_of_words_to_space = indexes.shuffle.take(spaces_to_add)
+  chars = string.chars
 
-    line = words.map.with_index do |word, index|
-      if indexes_of_words_to_space.include?(index)
-        "#{word} "
-      else
-        word
-      end
-    end.join(" ")
+  chars.each_with_index do |char, i|
+    prev = chars[i - 1]
+    peek = chars[i + 1]
+
+    if peek.nil?
+      paragraphs << char
+      paragraphs << paragraph
+      # paragraph = ""
+    elsif prev == "\n" && char == "\n" && peek != "\n"
+      paragraph << char
+      paragraphs << paragraph
+      paragraph = ""
+    elsif !char.nil?
+      paragraph << char
+    end
   end
 
-  line
+  paragraphs
 end
 
 def wrap(paragraph, width)
-  words = paragraph.split
+  words = paragraph.split(/ +/).map do |word|
+    word.gsub(/([^\n])\n([^\n])/, '\1 \2')
+  end
 
   return [] if words.none?
 
@@ -58,37 +64,36 @@ EOF
   lines << line
 end
 
+def justify(line, width)
+  line = line.dup
+
+  while line.length < width
+    words = line.split(/ /)
+    indexes = (0..(words.length - 2)).to_a
+    return line if indexes.none?
+    spaces_to_add = width - line.length
+    indexes_of_words_to_space = indexes.shuffle.take(spaces_to_add)
+
+    line = words.map.with_index do |word, index|
+      if indexes_of_words_to_space.include?(index)
+        "#{word} "
+      else
+        word
+      end
+    end.join(" ")
+  end
+
+  line
+end
 
 width = ARGV.shift.to_i
 input = ARGF.read
 
-paragraphs = input.split(/\n\n*?/)
-
-def split(string)
-  paragraphs = []
-  paragraph = ""
-
-  chars = string.chars << nil << nil
-
-  chars.each_cons(3) do |c, p1, p2|
-    if p1 == nil && p2 == nil
-      paragraph << c
-      paragraphs << paragraph
-    elsif c == "\n" && p1 == "\n" && p2 != "\n"
-      paragraphs << paragraph
-      paragraph = ""
-    else
-      paragraph << c
-    end
-  end
-
-  paragraphs
-end
+paragraphs = split(input)
 
 wrapped_paragraphs = paragraphs.map do |paragraph|
   wrap(paragraph, width)
 end
-
 
 justified_paragraphs = wrapped_paragraphs.map do |lines|
   if lines.length > 0
@@ -102,6 +107,6 @@ justified_paragraphs = wrapped_paragraphs.map do |lines|
   else
     lines.first
   end
-end.join("\n\n")
+end
 
-puts justified_paragraphs
+print justified_paragraphs.join
