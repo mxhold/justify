@@ -1,7 +1,9 @@
-Hello! This is an example line that I intend to have justified at 80 characters which is a good width. This is another sentence that's well past 80 characters since its on the same line.
-This is a sentence on a new line that's also longer than 80 characters in total length.
-This is the last sentence in this paragraph.
+If pattern is a String, then its contents are used as the delimiter when splitting str. If pattern is a single space, str is split on whitespace, with leading whitespace and runs of contiguous whitespace characters ignored.
 
-This is a new paragraph.
+If pattern is a Regexp, str is divided where the pattern matches. Whenever the pattern matches a zero-length string, str is split into individual characters. If pattern contains groups, the respective matches will be returned in the array as well.
 
-This is another paragraph with a sentence that's longer than the total maximum allowed number of characters on a line.
+If pattern is omitted, the value of $; is used. If $; is nil (which is the default), str is split on whitespace as if ` ‘ were specified.
+
+If the limit parameter is omitted, trailing null fields are suppressed. If limit is a positive number, at most that number of fields will be returned (if limit is 1, the entire string is returned as the only entry in an array). If negative, there is no limit to the number of fields returned, and trailing null fields are not suppressed.
+
+

@@ -6,6 +6,7 @@ def justify(line, width)
   while line.length < width
     words = line.split(/ /)
     indexes = (0..(words.length - 2)).to_a
+    return line if indexes.none?
     spaces_to_add = width - line.length
     indexes_of_words_to_space = indexes.shuffle.take(spaces_to_add)
 
@@ -28,6 +29,19 @@ def wrap(paragraph, width)
   line = nil
 
   words.each do |word|
+    if word.length > width
+      $stderr.puts <<EOF
+Error! Bad width.
+
+You specified a width of #{width} characters,
+but input contained the word "#{word}"
+which has a length of #{word.length}.
+
+You must specify a width of at least #{word.length}.
+EOF
+      exit 1
+    end
+
     possible_line = [line, word].compact.join(" ")
     if possible_line.length <= width
       line = possible_line
@@ -41,20 +55,27 @@ def wrap(paragraph, width)
 end
 
 
-width = 80
+width = ARGV.shift.to_i
 input = ARGF.read
 
 paragraphs = input.split(/\n\n/)
 
-justified_paragraphs = paragraphs.map do |paragraph|
-  wrapped_lines = wrap(paragraph, width)
-  last_line = wrapped_lines.pop
-  justified_lines = wrapped_lines.map { |line| justify(line, width) }
+wrapped_paragraphs = paragraphs.map do |paragraph|
+  wrap(paragraph, width)
+end
 
-  [
-    justified_lines,
-    last_line
-  ].reject(&:empty?).join("\n")
+justified_paragraphs = wrapped_paragraphs.map do |lines|
+  if lines.length > 0
+    last_line = lines.pop
+    justified_lines = lines.compact.map { |line| justify(line, width) }
+
+    [
+      justified_lines,
+      last_line
+    ].compact.reject(&:empty?).join("\n")
+  else
+    lines.first
+  end
 end.join("\n\n")
 
 puts justified_paragraphs
