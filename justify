@@ -1,0 +1,60 @@
+#!/usr/bin/env ruby
+
+def justify(line, width)
+  line = line.dup
+
+  while line.length < width
+    words = line.split(/ /)
+    indexes = (0...words.length).to_a
+    spaces_to_add = width - line.length
+    indexes_of_words_to_space = indexes.shuffle.take(spaces_to_add)
+
+    line = words.map.with_index do |word, index|
+      if indexes_of_words_to_space.include?(index)
+        "#{word} "
+      else
+        word
+      end
+    end.join(" ")
+  end
+
+  line
+end
+
+def wrap(paragraph, width)
+  words = paragraph.split
+
+  lines = []
+  line = nil
+
+  words.each do |word|
+    possible_line = [line, word].compact.join(" ")
+    if possible_line.length <= width
+      line = possible_line
+    else
+      lines << line
+      line = word
+    end
+  end
+
+  lines << line
+end
+
+
+width = 80
+input = ARGF.read
+
+paragraphs = input.split(/\n\n/)
+
+justified_paragraphs = paragraphs.map do |paragraph|
+  wrapped_lines = wrap(paragraph, width)
+  last_line = wrapped_lines.pop
+  justified_lines = wrapped_lines.map { |line| justify(line, width) }
+
+  [
+    justified_lines,
+    last_line
+  ].reject(&:empty?).join("\n")
+end.join("\n\n")
+
+puts justified_paragraphs
