@@ -1,9 +1,20 @@
-If pattern is a String, then its contents are used as the delimiter when splitting str. If pattern is a single space, str is split on whitespace, with leading whitespace and runs of contiguous whitespace characters ignored.
+The Text Justification algorithm will ensure that the output from your program is both left and right justified when displayed in a mono-spaced font  such as Courier. This paragraph is an example of such  justification. All the lines (except the last) of the output from a given run of your program should have the same length, and the last line is to be no longer than the other lines.
 
-If pattern is a Regexp, str is divided where the pattern matches. Whenever the pattern matches a zero-length string, str is split into individual characters. If pattern contains groups, the respective matches will be returned in the array as well.
+The Text Justification algorithm will ensure that the output from
+your program is both left and right justified when displayed in a
+mono-spaced font  such as Courier. This paragraph is an example
+of such  justification. All the lines (except the last) of the
+output from a given run of your program should have the same
+length, and the last line is to be no longer than the other
+lines.
 
-If pattern is omitted, the value of $; is used. If $; is nil (which is the default), str is split on whitespace as if ` ‘ were specified.
+The Text Justification algorithm will ensure that the output from
+your program is both left and right justified when displayed in a
+mono-spaced font  such as Courier.  This  paragraph is an example
+of such  justification.  All the  lines (except  the last) of the
+output from  a given run  of your  program should  have the  same
+length, and  the last  line is  to be  no longer  than the  other
+lines.
 
-If the limit parameter is omitted, trailing null fields are suppressed. If limit is a positive number, at most that number of fields will be returned (if limit is 1, the entire string is returned as the only entry in an array). If negative, there is no limit to the number of fields returned, and trailing null fields are not suppressed.
 
-
+Construct a linked list that represents the current line of output. For each word in the output, add a node to the end of the list representing that word, then add another node to the end to signify the amount of space between that word and the next (initially, this is one space). You should also keep track of these space nodes in some type of array structure, to facilitate fast random access. When adding a new word would cause the combined length of all the words and spaces in the list to exceed the line length, stop. Remove the last node of the list (remember, this is the space from the last word on the line). Then distribute additional spaces among the space nodes (you can choose a reference randomly from the array you kept around and add a space to that node) until the combined length of the words and spaces in the list is equal to the prescribed line length. (Actually, you don't want all the space to be distributed randomly; see phase 3 below.) Traverse the list and output each word and set of spaces in order. Output a newline and start over. When you run out of words, output the remaining list without adding extra space, then terminate.

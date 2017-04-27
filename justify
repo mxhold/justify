@@ -25,23 +25,25 @@ end
 def wrap(paragraph, width)
   words = paragraph.split
 
+  longest_word = words.max_by(&:length)
+
+  if longest_word.length > width
+    $stderr.puts <<EOF
+Error! Bad width.
+
+You specified a width of #{width} characters,
+but input contained the word "#{longest_word}"
+which has a length of #{longest_word.length}.
+
+You must specify a width of at least #{longest_word.length}.
+EOF
+    exit 1
+  end
+
   lines = []
   line = nil
 
   words.each do |word|
-    if word.length > width
-      $stderr.puts <<EOF
-Error! Bad width.
-
-You specified a width of #{width} characters,
-but input contained the word "#{word}"
-which has a length of #{word.length}.
-
-You must specify a width of at least #{word.length}.
-EOF
-      exit 1
-    end
-
     possible_line = [line, word].compact.join(" ")
     if possible_line.length <= width
       line = possible_line
