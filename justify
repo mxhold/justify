@@ -5,7 +5,7 @@ def justify(line, width)
 
   while line.length < width
     words = line.split(/ /)
-    indexes = (0...words.length).to_a
+    indexes = (0..(words.length - 2)).to_a
     spaces_to_add = width - line.length
     indexes_of_words_to_space = indexes.shuffle.take(spaces_to_add)
 
