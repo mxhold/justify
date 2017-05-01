@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require "justify"
+
+width = ARGV.shift.to_i
+input = ARGF.read
+
+puts Justify.justify(input, width)
